@@ -17,11 +17,24 @@ from account.conf import settings
 from account.hooks import hookset
 from account.models import EmailAddress
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder
 
 alnum_re = re.compile(r"^\w+$")
 
 
-class SignupForm(forms.Form):
+class CrispyForm(forms.Form):
+  def __init__(self, *args, **kwargs):
+    super(CrispyForm, self).__init__(*args, **kwargs)
+    self.helper = FormHelper()
+    self.helper.form_class = 'form-horizontal'
+    self.helper.label_class = 'col-lg-2'
+    self.helper.field_class = 'col-lg-8'
+    self.helper.form_method = 'post'
+    self.helper.add_input(Submit('submit', 'Submit'))
+
+
+class SignupForm(CrispyForm):
 
     username = forms.CharField(
         label=_("Username"),
@@ -73,7 +86,7 @@ class SignupForm(forms.Form):
         return self.cleaned_data
 
 
-class LoginForm(forms.Form):
+class LoginForm(CrispyForm):
 
     password = forms.CharField(
         label=_("Password"),
@@ -132,7 +145,7 @@ class LoginEmailForm(LoginForm):
             self.fields = OrderedDict((k, self.fields[k]) for k in field_order)
 
 
-class ChangePasswordForm(forms.Form):
+class ChangePasswordForm(CrispyForm):
 
     password_current = forms.CharField(
         label=_("Current Password"),
@@ -163,7 +176,7 @@ class ChangePasswordForm(forms.Form):
         return self.cleaned_data["password_new_confirm"]
 
 
-class PasswordResetForm(forms.Form):
+class PasswordResetForm(CrispyForm):
 
     email = forms.EmailField(label=_("Email"), required=True)
 
@@ -174,7 +187,7 @@ class PasswordResetForm(forms.Form):
         return value
 
 
-class PasswordResetTokenForm(forms.Form):
+class PasswordResetTokenForm(CrispyForm):
 
     password = forms.CharField(
         label=_("New Password"),
@@ -192,7 +205,7 @@ class PasswordResetTokenForm(forms.Form):
         return self.cleaned_data["password_confirm"]
 
 
-class SettingsForm(forms.Form):
+class SettingsForm(CrispyForm):
 
     email = forms.EmailField(label=_("Email"), required=True)
     timezone = forms.ChoiceField(

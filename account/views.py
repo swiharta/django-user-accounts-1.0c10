@@ -292,6 +292,7 @@ class LoginView(FormView):
 
     def get_context_data(self, **kwargs):
         ctx = kwargs
+        ctx['form'].helper.form_action = 'account_login'
         redirect_field_name = self.get_redirect_field_name()
         ctx.update({
             "redirect_field_name": redirect_field_name,
@@ -413,6 +414,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         if queryset is None:
             queryset = self.get_queryset()
         try:
+            print self.kwargs["key"].lower()
             return queryset.get(key=self.kwargs["key"].lower())
         except EmailConfirmation.DoesNotExist:
             raise Http404()

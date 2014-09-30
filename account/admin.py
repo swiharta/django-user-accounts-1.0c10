@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from account.models import Account, SignupCode, AccountDeletion, EmailAddress
+from account.models import Account, SignupCode, AccountDeletion, EmailAddress, EmailConfirmation
 
 
 class SignupCodeAdmin(admin.ModelAdmin):
@@ -22,3 +22,4 @@ admin.site.register(Account)
 admin.site.register(SignupCode, SignupCodeAdmin)
 admin.site.register(AccountDeletion, list_display=["email", "date_requested", "date_expunged"])
 admin.site.register(EmailAddress, EmailAddressAdmin)
+admin.site.register(EmailConfirmation)

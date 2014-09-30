@@ -323,18 +323,19 @@ class EmailConfirmation(models.Model):
             return email_address
 
     def send(self, **kwargs):
-        current_site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
+        # current_site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
+        domain = getattr(settings, "SITE_NAME", "gigarad.com")
         activate_url = "{0}://{1}{2}".format(
             protocol,
-            current_site.domain,
+            domain,
             reverse("account_confirm_email", args=[self.key])
         )
         ctx = {
             "email_address": self.email_address,
             "user": self.email_address.user,
             "activate_url": activate_url,
-            "current_site": current_site,
+            # "current_site": current_site,
             "key": self.key,
         }
         hookset.send_confirmation_email([self.email_address.email], ctx)
