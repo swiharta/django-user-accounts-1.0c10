@@ -335,7 +335,7 @@ class EmailConfirmation(models.Model):
             "email_address": self.email_address,
             "user": self.email_address.user,
             "activate_url": activate_url,
-            # "current_site": current_site,
+            "current_site": domain,
             "key": self.key,
         }
         hookset.send_confirmation_email([self.email_address.email], ctx)
